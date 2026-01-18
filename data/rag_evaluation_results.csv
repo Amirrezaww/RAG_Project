@@ -1,0 +1,20 @@
+query,response,contexts,retrieved_questions,retrieval_latency_ms,generation_latency_ms,total_latency_ms,num_contexts,ground_truth,dataset,context,faithfulness_score,accuracy_score,relevance_score
+Who won the FIFA World Cup in 2018?,"Based on the additional information provided, I will update my knowledge to reflect that the winner of the FIFA World Cup in 2018 was France.","[""['France']"", ""['France']"", ""['France']"", ""['France']"", ""['France']""]","['who is won the fifa world cup 2018', 'who won fifa football world cup in 2018', 'who is won the 2018 fifa world cup', 'who won today in the fifa world cup 2018', 'who won the fifa world cup 2018 russia']",377.2740364074707,1539.71529006958,2344.9907302856445,5,France,nq,"['France']
+['France']
+['France']
+['France']
+['France']",0,1,1
+What is the capital of France?,"Based on the additional information provided for 2024, I will add it to my overall knowledge to provide a more comprehensive answer.
+
+The capital of France is Paris.","[""['Tulle']"", 'Bouches-du-Rhône', ""['Lyon' 'Paris' 'Marseille' 'Toulouse' 'Nice']"", ""['Paris']"", ""['western Europe']""]","['capital of the correze dept in sw france', 'Henri Messerer was from the city that is the capital of which department of France?', 'what are the 5 largest cities in france', 'what city was the seat of the french monarchy', 'where is france located on a world map']",316.33830070495605,1896.20041847229,2642.639636993408,5,Paris,nq,"['Tulle']
+Bouches-du-Rhône
+['Lyon' 'Paris' 'Marseille' 'Toulouse' 'Nice']
+['Paris']
+['western Europe']",0,1,1
+Who wrote Romeo and Juliet?,"Based on the provided news data and my overall knowledge, I can answer the query as follows:
+
+The author of the original story of Romeo and Juliet is William Shakespeare. The music for Romeo and Juliet was composed by Pyotr Ilyich Tchaikovsky.","[""['Pyotr Ilyich Tchaikovsky']"", ""['Pyotr Ilyich Tchaikovsky']"", ""['William Shakespeare']"", ""['Romeo']"", ""['William Shakespeare']""]","['who wrote the music for romeo and juliet', 'who wrote the music to romeo and juliet', 'who wrote the original story of romeo and juliet', 'who died first in the play romeo and juliet', 'who is the author of romeo and juliet']",293.7500476837158,2945.045232772827,3666.5401458740234,5,William Shakespeare,nq,"['Pyotr Ilyich Tchaikovsky']
+['Pyotr Ilyich Tchaikovsky']
+['William Shakespeare']
+['Romeo']
+['William Shakespeare']",1,1,1
