@@ -147,10 +147,10 @@ You'll need accounts/keys for: a **Weaviate** cluster, **OpenRouter** (LLM), **C
 
 ## Limitations & future work
 
-This is a research project; results come from samples (20–100 queries) and have caveats worth being explicit about:
+This is a research project; results come from samples (20–100 queries) and have caveats worth being explicit about. The methodology, the issues found, and how they were handled are written up in **[EVALUATION.md](EVALUATION.md)**.
 
-- **Faithfulness scores are near zero for most strategies.** The NQ corpus stores *answers* (often single entities) rather than passages, so "is the answer grounded in the retrieved text?" is an ill-posed question on this data. A passage-level corpus (e.g. Wikipedia chunks) would make faithfulness meaningful.
-- **The generator occasionally restates the prompt** ("Based on the additional information provided…"), which inflates verbosity and can confuse the judge. Prompt hardening is in progress.
+- **Faithfulness scores are near zero for most strategies.** The NQ corpus stores *answers* (often single entities) rather than passages, so "is the answer grounded in the retrieved text?" is an ill-posed question on this data. A passage-level corpus (e.g. Wikipedia chunks) would make faithfulness meaningful — see EVALUATION.md.
+- **Prompt leakage — fixed.** The generator used to restate the prompt ("Based on the additional information provided…"); the root cause was the "2024 News / add to your knowledge" framing. The prompt is now directive and source-neutral. Committed results predate the fix and should be regenerated.
 - **Sample sizes are small.** Scaling evaluation to the full 85k QA pairs (and bootstrapping confidence intervals) is the next step.
 - **Single small generator.** Comparing across model sizes/families would isolate how much retrieval compensates for parametric weakness.
 
