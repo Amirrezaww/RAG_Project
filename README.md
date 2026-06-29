@@ -7,6 +7,7 @@ This project implements and **benchmarks four retrieval strategies** — dense s
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![Weaviate](https://img.shields.io/badge/Vector%20DB-Weaviate-green)
 ![Phoenix](https://img.shields.io/badge/Observability-Arize%20Phoenix-orange)
+![CI](https://github.com/Amirrezaww/RAG_Project/actions/workflows/ci.yml/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 ---
@@ -81,14 +82,34 @@ On a 20-query evaluation sample (relevance & faithfulness scored 0–1 by the ju
 
 ```
 RAG_Project/
-├── RAG.ipynb                 # End-to-end pipeline: ingest → retrieve → generate → evaluate
-├── utils.py                  # LLM/embedding clients + interactive comparison widget
-├── scripts/
-│   └── download_data.py      # Regenerate datasets from HuggingFace
-├── data/
-│   └── rag_evaluation_results.csv   # Saved evaluation outputs
+├── RAG.ipynb                 # End-to-end narrative: ingest → retrieve → generate → evaluate
+├── src/rag/                  # Reusable, tested package extracted from the notebook
+│   ├── config.py             #   environment-driven settings
+│   ├── llm.py                #   provider-agnostic chat client
+│   ├── retrieval.py          #   the 4 strategies + a name→function registry
+│   ├── prompts.py            #   RAG / no-RAG prompt construction
+│   ├── pipeline.py           #   retrieve-then-generate with latency timing
+│   └── evaluation.py         #   LLM-as-judge metrics + benchmark loop
+├── tests/                    # Unit tests for the pure logic (run in CI)
+├── scripts/download_data.py  # Regenerate datasets from HuggingFace
+├── utils.py                  # Notebook helpers (LLM calls + comparison widget)
+├── data/rag_evaluation_results.csv   # Saved evaluation outputs
+├── pyproject.toml            # Package + pytest config
 ├── requirements.txt
 └── .env.example              # Required API keys (copy to API.env)
+```
+
+The notebook is the readable, end-to-end story; `src/rag/` is the same logic
+factored into clean, importable, unit-tested modules:
+
+```python
+from rag import RAGPipeline, LLMClient, RETRIEVAL_METHODS, load_settings
+
+settings = load_settings()                     # reads API.env
+llm = LLMClient(settings.openrouter_api_key)
+pipeline = RAGPipeline(llm, collection)         # a Weaviate collection
+result = pipeline.run("Who won the 2018 World Cup?", RETRIEVAL_METHODS["hybrid_alpha_0.8"])
+print(result.response, result.total_latency_ms)
 ```
 
 ## Getting started
@@ -105,6 +126,9 @@ python scripts/download_data.py --max-examples 85000
 
 # 4. Run the notebook
 jupyter lab RAG.ipynb
+
+# (optional) run the unit tests for the src/rag package
+pytest -q
 ```
 
 You'll need accounts/keys for: a **Weaviate** cluster, **OpenRouter** (LLM), **Cohere** (reranking), **HuggingFace** (embeddings), and **Arize Phoenix** (tracing). See `.env.example` for the full list.
