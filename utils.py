@@ -2,17 +2,6 @@ import json
 import requests
 from typing import Union, List, Dict
 import os
-from contextlib import redirect_stdout, redirect_stderr
-import logging
-import httpx
-from openai import OpenAI, DefaultHttpxClient
-from together import Together
-
-# Custom transport to bypass SSL verification
-transport = httpx.HTTPTransport(local_address="0.0.0.0", verify=False)
-
-# Create a DefaultHttpxClient instance with the custom transport
-http_client = DefaultHttpxClient(transport=transport)
 
 
 def print_object_properties(obj: Union[dict, list]) -> None:
@@ -36,39 +25,10 @@ def print_object_properties(obj: Union[dict, list]) -> None:
             print_object_properties(l)
         
     print(t)
-    
-    
+
 
 # Define utility functions and classes
-def generate_embedding(prompt: str, model: str = "BAAI/bge-base-en-v1.5", together_api_key = None, **kwargs):
-    payload = {
-        "model": model,
-        "input": prompt,
-        **kwargs
-    }
-    if (not together_api_key) and ('TOGETHER_API_KEY' not in os.environ):
-        client = OpenAI(
-    api_key = '', # Set any as dlai proxy does not use it. Set the together api key if using the together endpoint
-    base_url="http://proxy.dlai.link/coursera_proxy/together/", # If using together endpoint, add it here https://api.together.xyz/
-   http_client=http_client, # ssl bypass to make it work via proxy calls, remove it if running with together.ai endpoint 
-)
-        try:
-            json_dict = client.embeddings.create(**payload).model_dump()
-            return json_dict['data'][0]['embedding']
-        except Exception as e:
-            raise Exception(f"Failed to get correct output from LLM call.\nException: {e}")
-    else:
-        if together_api_key is None:
-            together_api_key = os.environ['TOGETHER_API_KEY']
-        client = Together(api_key=together_api_key)
-        try:
-            json_dict = client.embeddings.create(**payload).model_dump()
-            return json_dict['data'][0]['embedding']
-        except Exception as e:
-            raise Exception(f"Failed to get correct output from LLM call.\nException: {e}")
-
-
-def generate_with_single_input(prompt: str, 
+def generate_with_single_input(prompt: str,
                                role: str = 'user', 
                                top_p: float = None, 
                                temperature: float = None,
@@ -200,6 +160,27 @@ def print_properties(item):
     )
 
 
+import subprocess
+from contextlib import contextmanager
+
+
+@contextmanager
+def suppress_subprocess_output():
+    """Silence stdout/stderr of any subprocess.Popen calls made within the block."""
+    original_popen = subprocess.Popen
+
+    def patched_popen(*args, **kwargs):
+        kwargs['stdout'] = subprocess.DEVNULL
+        kwargs['stderr'] = subprocess.DEVNULL
+        return original_popen(*args, **kwargs)
+
+    try:
+        subprocess.Popen = patched_popen
+        yield
+    finally:
+        subprocess.Popen = original_popen
+
+
 import ipywidgets as widgets
 from IPython.display import display, Markdown
 
@@ -236,7 +217,7 @@ def display_widget(llm_call_func, semantic_search_retrieve, bm25_retrieve, hybri
     
     query_input = widgets.Text(
         description='',
-        value="Tell me about United States and Brazil's relationship over the course of 2024. Provide links for the resources you use in the answer.",
+        value="Who won the FIFA World Cup in 2018, and who was the team captain?",
         placeholder='Type your query here',
         layout=widgets.Layout(width='70%')  # Adjusted width to make room for label
     )

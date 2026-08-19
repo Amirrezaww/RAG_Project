@@ -1,0 +1,42 @@
+# Minimum versions rather than exact pins: the project is developed on 3.11
+# but must also install cleanly on 3.13, where older builds are unavailable.
+
+# Core data / ML
+datasets>=3.2.0
+pandas>=2.2.3
+numpy>=2.1
+pyarrow>=18.0.0
+
+# Vector database
+weaviate-client>=4.9,<5.0
+
+# LLM generation (OpenAI-compatible: OpenRouter / Together / OpenAI)
+openai>=1.40
+
+# Observability & evaluation (Arize Phoenix)
+arize-phoenix>=19
+arize-otel>=0.7
+# The notebook uses the classic evaluator API (HallucinationEvaluator,
+# QAEvaluator, RelevanceEvaluator, OpenAIModel, llm_classify), which was
+# rewritten in arize-phoenix-evals 2.0. Pinning 0.29.0 keeps that API.
+# pip warns that arize-phoenix wants evals>=3.3; the combination is verified
+# to import and run correctly, so the warning is expected and safe to ignore.
+arize-phoenix-evals==0.29.0
+openinference-instrumentation-openai>=0.1.18
+opentelemetry-sdk>=1.27
+opentelemetry-exporter-otlp>=1.27
+nest-asyncio>=1.6.0
+
+# Plotting / notebook
+matplotlib>=3.10
+seaborn>=0.13.2
+ipywidgets>=8.1
+tqdm>=4.67
+
+# HTTP / config
+requests>=2.32
+httpx>=0.27
+python-dotenv>=1.0
+
+# Testing
+pytest>=8.0

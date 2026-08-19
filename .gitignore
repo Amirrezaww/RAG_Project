@@ -1,2 +1,23 @@
+# Secrets
 API.env
-data/hotpot_documents.jsonl
+.env
+
+# Data artifacts (regenerate with: python scripts/download_data.py)
+data/*.jsonl
+data/*.pkl
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
